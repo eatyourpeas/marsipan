@@ -1,0 +1,172 @@
+extends layout
+block content
+
+  div.container
+      .col-md-4.col-sm-4.col-xs-4
+        +panel("Patient Data","success")
+          form.form-horizontal(action ="calculator", method="post", id="calculator")
+           .form-group
+            .div(class="col-sm-4 col-md-4")
+             label(for='date_of_birth') Date of Birth:
+            .div(class="col-sm-8 col-md-8")
+             input(id="date_of_birth", class="form-control", type="date", name="date_of_birth", placeholder="Enter Date of Birth", value="#{date_of_birth}")
+             .br
+           .form-group
+            .div(class="col-sm-4 col-md-4")
+             label(for='date_of_clinic') Clinic Date:
+            .div(class="col-sm-8 col-md-8")
+             input(id="date_of_clinic", class="form-control", name="date_of_clinic", type="date", placeholder="Enter date of clinic visit", value="#{date_of_clinic}").input-group
+             .br
+           .form-group
+            .div(class="col-sm-4 col-md-4")
+             label(for='height') Height:
+            .div(class="col-sm-8 col-md-8")
+             input(id="height", class="form-control", name="height", placeholder="cm", value="#{height} cm")
+             .br
+           .form-group
+            .div(class="col-sm-4 col-md-4")
+             label(for='weight') Weight:
+            .div(class="col-sm-8 col-md-8")
+             input(id="weight", class="form-control", name="weight", placeholder="kg", value="#{weight} kg")
+             .br
+           .div(class="btn-group", data-toggle="buttons")
+            label(class="btn btn-default")
+             input(type="radio", name = "sexchange" id="male", value="Male")
+             | Male
+            label(class="btn btn-default active")
+             input(type="radio", name = "sexchange" id="female", value="Female", checked)
+             | Female
+           .form-group
+           input.btn(type="submit", value="calculate", class="btn btn-success", id="calculatebutton")
+      .col-md-4.col-sm-4.col-xs-4
+        +panel("Results", "info")
+         .row
+          .div(class="col-sm-12 col-md-12")
+           .h4
+            label Ages
+         .well
+           .row
+            .div(class="col-sm-6 col-md-6")
+             label Decimal age:
+            .div(class="col-sm-6 col-md-6")
+             label #{decimal_age + " yrs"}
+           .row
+            .div(class="col-sm-6 col-md-6")
+             label Calendar Age:
+            .div(class="col-sm-6 col-md-6")
+             label #{calendar_age}
+         .row
+          .div(class="col-sm-12 col-md-12")
+           .h4
+            label Height
+         .well
+           .row
+            .div(class="col-sm-6 col-md-6")
+             label Centile:
+            .div(class="col-sm-6 col-md-6")
+             label #{height_centile + " %"}
+           .row
+            .div(class="col-sm-6 col-md-6")
+             label SDS:
+            .div(class="col-sm-6 col-md-6")
+             label #{height_sds}
+         .row
+          .div(class="col-sm-12 col-md-12")
+           .h4
+            label Weight
+         .well
+           .row
+            .div(class="col-sm-6 col-md-6")
+             label Centile:
+            .div(class="col-sm-6 col-md-6")
+             label #{weight_centile + " %"}
+           .row
+            .div(class="col-sm-6 col-md-6")
+             label SDS:
+            .div(class="col-sm-6 col-md-6")
+             label #{weight_sds}
+         .row
+          .div(class="col-sm-12 col-md-12")
+           .h4
+            label BMI
+         .well
+           .row
+            .div(class="col-sm-6 col-md-6")
+             label Centile:
+            .div(class="col-sm-6 col-md-6")
+             label #{bmi_centile + " %"}
+           .row
+            .div(class="col-sm-6 col-md-6")
+             label SDS:
+            .div(class="col-sm-6 col-md-6")
+             label #{bmi_sds}
+           .row
+            .div(class="col-sm-6 col-md-6")
+             label %mBMI:
+            .div(class="col-sm-6 col-md-6")
+             label #{pctmBMI + " %"}
+      .col-md-4.col-sm-4.col-xs-4
+        +panel("Targets", "primary")
+         .row
+          .div(class="col-sm-12 col-md-12")
+           .h4
+            label Weights for BMI Centile
+         .well
+           .row
+            .div(class="col-sm-8 col-md-8")
+             label 50th Centile ('100%'):
+            .div(class="col-sm-4 col-md-4")
+             label #{ideal_weight +" kg"}
+           .row
+            .div(class="col-sm-8 col-md-8")
+             label 9th Centile BMI:
+            .div(class="col-sm-4 col-md-4")
+             label #{ninth_centile + " kg"}
+           .row
+            .div(class="col-sm-8 col-md-8")
+             label 91st Centile BMI:
+            .div(class="col-sm-4 col-md-4")
+             label #{ninetyfirst_centile + " kg"}
+         .row
+          .div(class="col-sm-12 col-md-12")
+           .h4
+            label Weights for mBMI Percentages
+         .well
+           .row
+            .div(class="col-sm-8 col-md-8")
+             label 95%:
+            .div(class="col-sm-4 col-md-4")
+             label #{ninety_five_percent + " kg"}
+           .row
+            .div(class="col-sm-8 col-md-8")
+             label 90%:
+            .div(class="col-sm-4 col-md-4")
+             label #{ninety_percent + " kg"}
+           .row
+            .div(class="col-sm-8 col-md-8")
+             label 85%:
+            .div(class="col-sm-4 col-md-4")
+             label #{eighty_five_percent + " kg"}
+          .row
+          .div(class="col-sm-12 col-md-12")
+           .h4
+            label Weights for BMI SDS
+         .well
+           .row
+            .div(class="col-sm-8 col-md-8")
+             label +1 SD:
+            .div(class="col-sm-4 col-md-4")
+             label #{one_sd + " kg"}
+           .row
+            .div(class="col-sm-8 col-md-8")
+             label +2 SD:
+            .div(class="col-sm-4 col-md-4")
+             label #{two_sd + " kg"}
+         
+ 
+  div.footer
+    div.container
+    .row
+    .col-md-8.col-sm-10.col-xs-12
+    .pull-right
+    .p Developer: eatyourpeas

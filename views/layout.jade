@@ -1,0 +1,38 @@
+doctype
+html( lang="en" )
+include mixins
+head
++nav("Marsipan", "dropdown_menu", "inverse")
+    +nav_item( "/", "active" ) Home
+    +nav_item( "/calculator") %mBMI Calculator
+    +nav_item( "risk_tool.html") Risk Assessment Tool
+    +nav_item( "about.html" ) About
+    +nav_item( "contact.html" ) Contact
+    +nav_item_dropdown( "#" )( label="Resources")
+        +nav_item( "#" ) Action
+        +nav_item( "#" ) Another action
+        +nav_item( "#" ) Something else here
+        +nav_divider
+        +nav_header Nav header
+        +nav_item( "#" ) Separated link
+        +nav_item( "#" ) One more separated link
+
+
+title = Marsipan
+meta( charset='utf-8' )
+meta( http-equiv='X-UA-Compatible', content='IE=edge' )
+meta( name='viewport', content='width=device-width, initial-scale=1.0' )
+meta( name='description', content='Baking Bootstrap Snippets with Jade' )
+//- Bootswatch Theme
+link(href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/flatly/bootstrap.min.css", rel="stylesheet")
+link(href="/bootstrap-switch.css", rel="stylesheet")
+
+body(style="padding-bottom:10rem;")
+.container
+
+script( src='//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js' )
+script( src='//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js' )
+script (src="bootstrap-switch.js")
+
+body
+block content
