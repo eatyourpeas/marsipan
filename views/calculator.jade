@@ -1,33 +1,35 @@
 extends layout
+include mixins
 block content
 
   div.container
       .col-md-4.col-sm-4.col-xs-4
         +panel("Patient Data","success")
           form.form-horizontal(action ="calculator", method="post", id="calculator")
+           input(type='hidden', name='_csrf', value=_csrf)
            .form-group
             .div(class="col-sm-4 col-md-4")
              label(for='date_of_birth') Date of Birth:
             .div(class="col-sm-8 col-md-8")
-             input(id="date_of_birth", class="form-control", type="date", name="date_of_birth", placeholder="Enter Date of Birth", value="#{date_of_birth}")
+             input(id="date_of_birth", class="form-control", type="date", name="date_of_birth", placeholder="Enter Date of Birth", value="#{date_of_birth}", required)
              .br
            .form-group
             .div(class="col-sm-4 col-md-4")
              label(for='date_of_clinic') Clinic Date:
             .div(class="col-sm-8 col-md-8")
-             input(id="date_of_clinic", class="form-control", name="date_of_clinic", type="date", placeholder="Enter date of clinic visit", value="#{date_of_clinic}").input-group
+             input(id="date_of_clinic", class="form-control", name="date_of_clinic", type="date", placeholder="Enter date of clinic visit", value="#{date_of_clinic}", required).input-group
              .br
            .form-group
             .div(class="col-sm-4 col-md-4")
              label(for='height') Height:
             .div(class="col-sm-8 col-md-8")
-             input(id="height", class="form-control", name="height", placeholder="cm", value="#{height} cm")
+             input(id="height", class="form-control", name="height", placeholder="cm", value="#{height}", required)
              .br
            .form-group
             .div(class="col-sm-4 col-md-4")
              label(for='weight') Weight:
             .div(class="col-sm-8 col-md-8")
-             input(id="weight", class="form-control", name="weight", placeholder="kg", value="#{weight} kg")
+             input(id="weight", class="form-control", name="weight", placeholder="kg", value="#{weight}", required)
              .br
            .div(class="btn-group", data-toggle="buttons")
             label(class="btn btn-default")
@@ -49,7 +51,7 @@ block content
             .div(class="col-sm-6 col-md-6")
              label Decimal age:
             .div(class="col-sm-6 col-md-6")
-             label #{decimal_age + " yrs"}
+             label #{locals.decimal_age + " yrs"}
            .row
             .div(class="col-sm-6 col-md-6")
              label Calendar Age:
