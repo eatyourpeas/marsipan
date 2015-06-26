@@ -200,6 +200,8 @@ app.get('/auth/venmo/callback', passport.authorize('venmo', { failureRedirect: '
  */
 app.use(errorHandler());
 
+var port = process.env.PORT || 8080;
+
 /**
  * Start Express server.
  */
