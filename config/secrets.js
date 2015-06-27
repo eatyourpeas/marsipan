@@ -24,7 +24,7 @@ module.exports = {
 //  db: process.env.MONGODB || 'mongodb://localhost:27017/test',
 db: process.env.MONGODB || 'mongodb://eatyourpeas:pushk1n@ds035740.mongolab.com:35740/heroku_1137311z'
 
-  sessionSecret: process.env.SESSION_SECRET || 'Your Session Secret goes here',
+  sessionSecret: process.env.SESSION_SECRET || 'UAABFAWTIHIUFBL0PDC3TDMSXJF2GTGWLD3BES1QHXKAIYQB',
 
   mailgun: {
     user: process.env.MAILGUN_USER || 'postmaster@sandboxab2d1fc706114e4999ea64ad41d8056f.mailgun.org',
