@@ -7,3 +7,15 @@ exports.index = function(req, res) {
     title: 'Home'
   });
 };
+
+exports.getAbout = function(req, res) {
+  res.render('about', {
+    title: 'About Us'
+  });
+};
+
+exports.getPublications = function(req, res) {
+  res.render('publications', {
+    title: 'Publications'
+  });
+};

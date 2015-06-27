@@ -8,14 +8,26 @@
         span.icon-bar
       a.navbar-brand(href='/')
         img(src='/marsipanicon30.png')
-      a.navbar-brand(href='/')
-        | Marsipan
+      ul.nav.navbar-nav
+        li(title='Marsipan')
+          a(href='/') Marsipan
     .collapse.navbar-collapse
       ul.nav.navbar-nav
         li(class=title=='Home'?'active':undefined)
           a(href='/') Home
-        li(class=title=='%medianBMI Calculator'?'active':undefined)
-          a(href='/calculator') % median BMI Calculator
+        li(class=title=='aboutus'?'active':undefined)
+          a(href='/about') About Us
+        li(class=title=='publications'?'active':undefined)
+          a(href='/publications') Publications
+        li.dropdown(class=title=='Resources For Clinicians'?'active':undefined)
+            a.dropdown-toggle(href='#', data-toggle='dropdown') Clinician Resources
+              i.caret
+            ul.dropdown-menu
+              li
+                a(href='/calculator') % median BMI Calculator
+              li.divider
+              li
+                a(href='/risktool') Risk Assessment Tool
         li(class=title=='Contact'?'active':undefined)
           a(href='/contact') Contact
       ul.nav.navbar-nav.navbar-right

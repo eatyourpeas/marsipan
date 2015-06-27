@@ -1,27 +1,35 @@
 extends layout
-
 block content
-  h1 Marsipan (Medically At Risk Sick Patients with Anorexia Nervosa)
-  p.lead A national resource for clinicians caring for the medical aspects of eating disorders
-  hr
-  .row
-    .col-sm-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(href='#', role='button') View details »
-    .col-sm-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(href='#', role='button') View details »
-    .col-sm-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(href='#', role='button') View details »
-    .col-sm-6
-      h2 Heading
-      p Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-      p
-        a.btn.btn-default(href='#', role='button') View details »
+  .container-fluid
+    .jumbotron
+      h1 Marsipan (Medically At Risk Sick Patients with Anorexia Nervosa)
+      hr
+      p.lead A national resource for clinicians caring for the medical aspects of eating disorders
+    .row
+      .col-sm-6
+        h2 What is MARSIPAN?
+        p The
+          a(href="http://www.rcpsych.ac.uk/files/pdfversion/CR189.pdf") 
+            | MARSIPAN report 
+          | identified a need amongst clinicians for guidance when managing adults with an eating disorder. In January 2010 Junior Marsipan was formed, recognising that the challenges in managing children, young people and their families were different in several important ways. This culminated in the publication of the 
+          a(href='http://www.rcpsych.ac.uk/files/pdfversion/CR168nov14.pdf')
+           | Junior Marsipan Report 
+          | which contains practical guidance exactly to meet this important need. 
+        p
+          a.btn.btn-default(href='http://www.rcpsych.ac.uk/pdf/CR189checklistXX.pdf', role='button') Download the Risk Assessment Checklist »
+      .col-sm-6
+        h2 Who are we?
+        p We are a group of specialists (doctors, nurses, dieticians) all with expertise in managing eating disorders in children and young people. We have a growing list of members.
+        p
+          a.btn.btn-default(href='/about', role='button') View details »
+    .row
+      .col-sm-6
+        h2 Resources for young people and their families
+        p Children, young people and their families living with eating disorders often find that reliable medical advice is difficult to find. Marsipan keeps a list of resources and articles which may be useful to families.
+        p
+          a.btn.btn-default(href='/patientresources', role='button') View details »
+      .col-sm-6
+        h2 Resources for Clinicians
+        p The Marsipan group is committed to establishing best practice through research and audit, the development of clinical guidelines and promoting training in the medical management of eating disorders. It is a growing network for experienced clinicians to share resources, ideas and best practice.
+        p
+          a.btn.btn-default(href='/risktool', role='button') Log in to view Resources »

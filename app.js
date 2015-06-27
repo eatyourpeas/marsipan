@@ -31,6 +31,8 @@ var userController = require('./controllers/user');
 var apiController = require('./controllers/api');
 var contactController = require('./controllers/contact');
 var calculatorController = require('./controllers/calculator');
+var riskToolController = require('./controllers/risks');
+var patientController = require('./controllers/patient');
 
 /**
  * API keys and Passport configuration.
@@ -150,6 +152,11 @@ app.post('/api/bitgo', apiController.postBitGo);
 //routes
 app.get('/calculator', passportConf.isAuthenticated, calculatorController.getCalculator);
 app.post('/calculator', passportConf.isAuthenticated, calculatorController.postCalculator);
+app.get('/risktool', passportConf.isAuthenticated, riskToolController.getRiskTool);
+app.post('/risktool', passportConf.isAuthenticated, riskToolController.postRiskTool);
+app.get('/about', homeController.getAbout);
+app.get('/publications', homeController.getPublications);
+app.get('/patientresources', patientController.getPatientResources);
 
 /**
  * OAuth authentication routes. (Sign in)
