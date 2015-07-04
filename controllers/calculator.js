@@ -4,24 +4,31 @@ var growthmethods = require('growthmethods');
  * Calculator page.
  */
 exports.getCalculator = function(req, res) {
-	
+
   res.render('calculator', {
     title: '%mBMI Calculator',
-    date_of_birth: "", date_of_clinic: "", height: "", weight: "", calendar_age: "", decimal_age: "", height_centile: "", height_sds: "", weight_centile: "", weight_sds: "", bmi_centile: "", bmi_sds: "", pctmBMI: "", ideal_weight: "", ninth_centile: "", ninetyfirst_centile: "", eighty_five_percent: "", ninety_percent: "", ninety_five_percent: "", one_sd: "", two_sd: ""
+    date_of_birth: "", date_of_clinic: "", height: "", weight: "", systolic: "", diastolic: "", calendar_age: "", decimal_age: "", height_centile: "", height_sds: "", weight_centile: "", weight_sds: "", bMI: "", bmi_centile: "", bmi_sds: "", systolic_sds: "", systolic_centile: "", diastolic_sds: "", diastolic_centile: "", pctmBMI: "", ideal_weight: "", ninth_centile: "", ninetyfirst_centile: "", eighty_five_percent: "", ninety_percent: "", ninety_five_percent: "", one_sd: "", two_sd: ""
   });
 };
 
 exports.postCalculator = function(req, res){
 
-
 	var height = req.body.height;
 	var weight = req.body.weight;
+	var bMI = req.body.bMI;
 	var clinic_date = req.body.date_of_clinic;
 	var date_of_birth = req.body.date_of_birth;
-	var gender = req.body.sexchange;
+	var gender = req.body.gender;
+	var systolicBP = req.body.systolic;
+	var diastolicBP = req.body.diastolic;
+  var systolic_SDS_label = req.body.systolic_sds;
+  var diastolic_SDS_label = req.body.diastolic_sds;
+  var systolic_centile_label = req.body.systolic_centile;
+  var diastolic_centile_label = req.body.diastolic_centile;
 	isMale=false;
-	if (gender=="Male") {isMale=true};
-	var decimal_age, calendar_age, height_centile, height_sds, weight_centile, weight_sds, bmi, bmi_centile, bmi_sds, pctmBMI;
+	if (gender=="male") {isMale=true};
+
+	var decimal_age, calendar_age, height_centile, height_sds, weight_centile, weight_sds, bmi, bmi_centile, bmi_sds, pctmBMI, systolicBP, diastolicBP, systolic_sds, systolic_centile, diastolic_sds, diastolic_centile;
 	decimal_age = growthmethods.decimalAgeFromDates(date_of_birth, clinic_date);
 
 	var calendar_age = growthmethods.chronologicalAgeFromDates(date_of_birth, clinic_date);
@@ -31,7 +38,7 @@ exports.postCalculator = function(req, res){
 	if (decimal_age >20) {
 		decimal_age = 20;
 	};
-	
+
 	///do the calculations
 
 	bmi = growthmethods.bmiFromHeightandWeight(height, weight);
@@ -43,8 +50,33 @@ exports.postCalculator = function(req, res){
 	bmi_centile = growthmethods.convertZScoreToCentile(bmi_sds);
 	pctmBMI = growthmethods.percentageMedianBMI(bmi, decimal_age, isMale);
 
+console.log('ermm.. '+systolicBP);
+
+  if (systolicBP.length > 0) {
+    console.log('true!');
+    systolic_sds = growthmethods.bpSDS(true, isMale, decimal_age, systolicBP);
+    systolic_centile = growthmethods.convertZScoreToCentile(systolic_sds);
+    systolic_sds = Math.round(systolic_sds*100)/100;
+    systolic_centile = Math.round(systolic_centile*10)/10;
+    systolic_centile = centileBeyondThreshold(systolic_centile);
+  } else {
+    systolic_centile = "";
+    systolic_sds = "";
+  }
+
+  if (diastolicBP.length > 0) {
+    diastolic_sds = growthmethods.bpSDS(false, isMale, decimal_age, diastolicBP);
+    diastolic_centile = growthmethods.convertZScoreToCentile(diastolic_sds);
+    diastolic_sds = Math.round(diastolic_sds*100)/100;
+    diastolic_centile = Math.round(diastolic_centile*10)/10;
+    diastolic_centile = centileBeyondThreshold(diastolic_centile);
+  } else {
+    diastolic_centile = "";
+    diastolic_sds = "";
+  }
+
 /// weight target calculations
-	
+
 	var medianBMI = growthmethods.measurementFromSDS("BMI", 0, bmi, isMale, decimal_age);
 	var ninthCentileBMI = growthmethods.measurementFromSDS("BMI", -1.341, bmi, isMale, decimal_age);
 	var ninetyfirstCentileBMI = growthmethods.measurementFromSDS("BMI", 1.341, bmi, isMale, decimal_age);
@@ -84,10 +116,9 @@ exports.postCalculator = function(req, res){
 	eighty_five_percent = Math.round(targetWeight85pctmBMI*100)/100;
 	one_sd = Math.round(weightFor1SDBMI*100)/100;
 	two_sd = Math.round(weightFor2SDBMI*100)/100;
-	
-	
-	
-	res.render('calculator', {date_of_birth: date_of_birth, date_of_clinic: clinic_date, height: height + " cm", weight: weight + " kg", calendar_age: calendar_age, decimal_age: decimal_age, height_centile: height_centile, height_sds: height_sds, weight_centile: weight_centile, weight_sds: weight_sds, bmi_centile: bmi_centile, bmi_sds: bmi_sds, pctmBMI: pctmBMI, ideal_weight: ideal_weight, ninth_centile: ninth_centile, ninetyfirst_centile: ninetyfirst_centile, eighty_five_percent: eighty_five_percent, ninety_percent: ninety_percent, ninety_five_percent: ninety_five_percent, one_sd: one_sd, two_sd: two_sd});
+
+
+	res.render('calculator', {date_of_birth: date_of_birth, date_of_clinic: clinic_date, height: height, weight: weight, systolic: systolicBP, diastolic: diastolicBP, gender: gender, calendar_age: calendar_age, decimal_age: decimal_age, height_centile: height_centile, height_sds: height_sds, weight_centile: weight_centile, weight_sds: weight_sds, bMI: bmi, bmi_centile: bmi_centile, bmi_sds: bmi_sds, systolic_sds: systolic_sds, systolic_centile: systolic_centile, diastolic_sds: diastolic_sds, diastolic_centile: diastolic_centile, pctmBMI: pctmBMI, ideal_weight: ideal_weight, ninth_centile: ninth_centile, ninetyfirst_centile: ninetyfirst_centile, eighty_five_percent: eighty_five_percent, ninety_percent: ninety_percent, ninety_five_percent: ninety_five_percent, one_sd: one_sd, two_sd: two_sd});
 
 };
 

@@ -12,7 +12,7 @@ html {
 }
 
 body {
-  padding-top: 60px;
+  padding-top: 100px;
   margin-bottom: 75px;
 }
 
@@ -31,6 +31,9 @@ footer {
 
 // Navbar
 // -------------------------
+.container-fluid-navbar {
+  padding-top: 0px;
+}
 
 .navbar-nav img {
   width: 30px;
@@ -52,22 +55,27 @@ color: white;  /*Sets the text hover color on navbar*/
 background-color: black; /*Sets the background hover color on navbar*/
 }
 
-.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active >   
+.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active >
  a:hover, .navbar-default .navbar-nav > .active > a:focus {
 color: white; /*BACKGROUND color for active*/
 background-color: black;
 }
 
-.navbar-brand > a:hover {
-  color: white;  /*Sets the text hover color on navbar*/
-  background-color: black; /*Sets the background hover color on navbar*/
+.navbar-default .navbar-brand > li > a:hover {
+  color: black;  /*Sets the text hover color on navbar*/
+  font-weight: bold;
+  line-height: 30px;
+}
+
+.navbar-default .navbar-brand {
+  color: white;
   font-weight: bold;
   line-height: 30px;
 }
 
 .dropdown-menu > li > a:hover,
  .dropdown-menu > li > a:focus {
-  color: #262626;
+  color: white;
  text-decoration: none;
 background-color: #66CCFF;  /*change color of links in drop down here*/
  }
@@ -106,9 +114,84 @@ background-color: #66CCFF;  /*change color of links in drop down here*/
   margin-right: 6px;
 }
 
-.cover{
-    color: rgb(255, 255, 255);
-    position: relative;
-    min-height: 350px;
-    background: url("../images/climb.jpg") no-repeat scroll 0px 100% / cover transparent;
+
+// jumbotron
+.jumbotron {
+  color: black;
+}
+ strong {
+  color: #144077;
+}
+
+// this is the radio buttons
+.label.btn span {
+  font-size: 1.5em ;
+}
+
+.label input[type="radio"] ~ i.fa.fa-circle-o{
+    color: #c8c8c8;    display: inline;
+}
+.label input[type="radio"] ~ i.fa.fa-check-circle-o{
+    display: none;
+}
+.label input[type="radio"]:checked ~ i.fa.fa-circle-o{
+    display: none;
+}
+.label input[type="radio"]:checked ~ i.fa.fa-check-circle-o{
+    color: #7AA3CC;    display: inline;
+}
+.label:hover input[type="radio"] ~ i.fa {
+color: #7AA3CC;
+}
+
+.label input[type="checkbox"] ~ i.fa.fa-square-o{
+    color: #c8c8c8;    display: inline;
+}
+.label input[type="checkbox"] ~ i.fa.fa-check-square-o{
+    display: none;
+}
+.label input[type="checkbox"]:checked ~ i.fa.fa-square-o{
+    display: none;
+}
+.label input[type="checkbox"]:checked ~ i.fa.fa-check-square-o{
+    color: #7AA3CC;    display: inline;
+}
+.label:hover input[type="checkbox"] ~ i.fa {
+color: #7AA3CC;
+}
+
+.div[data-toggle="buttons"] label.active{
+    color: #7AA3CC;
+}
+
+.div[data-toggle="buttons"] label {
+display: inline-block;
+padding: 6px 12px;
+margin-bottom: 0;
+font-size: 14px;
+font-weight: normal;
+line-height: 2em;
+text-align: left;
+white-space: nowrap;
+vertical-align: top;
+cursor: pointer;
+background-color: none;
+border: 0px solid
+#c8c8c8;
+border-radius: 3px;
+color: #c8c8c8;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+-o-user-select: none;
+user-select: none;
+}
+
+.div[data-toggle="buttons"] label:hover {
+color: #7AA3CC;
+}
+
+.div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active {
+-webkit-box-shadow: none;
+box-shadow: none;
 }

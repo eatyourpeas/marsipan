@@ -11,7 +11,21 @@ var secrets = require('../config/secrets');
  * Login page.
  */
 exports.getLogin = function(req, res) {
-  if (req.user) return res.redirect('/');
+
+  //logged in - serve home
+//  if (req.user) return res.redirect('/');
+
+  //check token - new fragment
+
+  if (req.user ) {
+    return res.redirect('/');
+  }
+
+
+  ///end check token
+
+
+  ///not logged in - serve login page
   res.render('account/login', {
     title: 'Login'
   });
@@ -38,6 +52,16 @@ exports.postLogin = function(req, res, next) {
       req.flash('errors', { msg: info.message });
       return res.redirect('/login');
     }
+    var token = user.resetPasswordToken;
+
+    if (user.resetPasswordToken !== undefined && user.resetPasswordToken !== null) {
+      console.log("my token is: "+token);
+      req.flash('errors', { msg: 'Nearly there! Check your email to complete the registration process.' });
+      return res.redirect('/login');
+    }
+
+
+
     req.logIn(user, function(err) {
       if (err) return next(err);
       req.flash('success', { msg: 'Success! You are logged in.' });
@@ -84,24 +108,121 @@ exports.postSignup = function(req, res, next) {
   }
 
   var user = new User({
-    email: req.body.email,
+    email: req.body.email.toLowerCase(),
     password: req.body.password
   });
 
-  User.findOne({ email: req.body.email }, function(err, existingUser) {
+  User.findOne({ email: req.body.email.toLowerCase() }, function(err, existingUser) {
     if (existingUser) {
       req.flash('errors', { msg: 'Account with that email address already exists.' });
       return res.redirect('/signup');
     }
-    user.save(function(err) {
+    //removed the old save user
+
+    async.waterfall([
+      function(done) {
+        crypto.randomBytes(16, function(err, buf) {
+          var token = buf.toString('hex');
+          done(err, token);
+        });
+      },
+      function(token, done) {
+
+          user.resetPasswordToken = token;
+          user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+          user.save(function(err) {
+            done(err, token, user);
+          });
+      },
+      function(token, user, done) {
+        var transporter = nodemailer.createTransport({
+          service: 'Mailgun',
+          auth: {
+            user: secrets.mailgun.user,
+            pass: secrets.mailgun.password
+          }
+        });
+        var mailOptions = {
+          to: user.email,
+          from: 'admin@marsipan.org.uk',
+          subject: 'Confirm Registration - Marsipan',
+          text: 'You are receiving this email because you (or someone else) have registered with www.marsipan.org.uk.\n\n' +
+            'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+            'http://' + req.headers.host + '/signedup/' + token + '\n\n' +
+            'If you did not request this, please ignore this email.\n'
+        };
+        transporter.sendMail(mailOptions, function(err) {
+          req.flash('info', { msg: 'An e-mail has been sent to ' + user.email + ' with further instructions.' });
+          done(err, 'done');
+        });
+      }
+    ], function(err) {
       if (err) return next(err);
-      req.logIn(user, function(err) {
-        if (err) return next(err);
-        res.redirect('/');
-      });
+      res.redirect('/');
     });
   });
 };
+
+/**
+ * GET /signedup/:token
+ * Reset Password page.
+ */
+ exports.getSignedup = function(req, res) {
+   var errors = req.validationErrors();
+
+   if (errors) {
+     req.flash('errors', errors);
+     return res.redirect('back');
+   }
+
+   async.waterfall([
+     function(done) {
+       User
+         .findOne({ resetPasswordToken: req.params.token })
+         .where('resetPasswordExpires').gt(Date.now())
+         .exec(function(err, user) {
+           if (!user) {
+             req.flash('errors', { msg: 'Account registration token is invalid or has expired.' });
+             return res.redirect('back');
+           }
+
+           user.resetPasswordToken = undefined;
+           user.resetPasswordExpires = undefined;
+
+           user.save(function(err) {
+             if (err) return next(err);
+             req.logIn(user, function(err) {
+               done(err, user);
+             });
+           });
+         });
+     },
+     function(user, done) {
+       var transporter = nodemailer.createTransport({
+         service: 'Mailgun',
+         auth: {
+           user: secrets.mailgun.user,
+           pass: secrets.mailgun.password
+         }
+       });
+       var mailOptions = {
+         to: user.email,
+         from: 'admin@marsipan.org.uk',
+         subject: 'You have registered with Marsipan.',
+         text: 'Hello,\n\n' +
+           'This is a confirmation that ' + user.email + ' is now a registered username at www.marsipan.org.uk.\n'
+       };
+       transporter.sendMail(mailOptions, function(err) {
+         req.flash('success', { msg: 'Success! Your account has now been created.' });
+         done(err);
+       });
+     }
+   ], function(err) {
+     if (err) return next(err);
+     res.redirect('/');
+   });
+ };
 
 /**
  * GET /account
@@ -265,8 +386,8 @@ exports.postReset = function(req, res, next) {
       });
       var mailOptions = {
         to: user.email,
-        from: 'hackathon@starter.com',
-        subject: 'Your Hackathon Starter password has been changed',
+        from: 'admin@marsipan.org.uk',
+        subject: 'Your Marsipan password has been changed',
         text: 'Hello,\n\n' +
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
       };
@@ -340,8 +461,8 @@ exports.postForgot = function(req, res, next) {
       });
       var mailOptions = {
         to: user.email,
-        from: 'hackathon@starter.com',
-        subject: 'Reset your password on Hackathon Starter',
+        from: 'admin@marsipan.org.uk',
+        subject: 'Reset your password for Marsipan',
         text: 'You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
           'http://' + req.headers.host + '/reset/' + token + '\n\n' +
@@ -357,3 +478,88 @@ exports.postForgot = function(req, res, next) {
     res.redirect('/forgot');
   });
 };
+
+
+/*
+exports.postSignup = function(req, res, next) {
+  req.assert('email', 'Email is not valid').isEmail();
+  req.assert('email', 'Email must be an NHS email').matches(/(nhs|NHS)/);
+  req.assert('password', 'Password must be at least 4 characters long').len(4);
+  req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+
+  var errors = req.validationErrors();
+
+  if (errors) {
+    req.flash('errors', errors);
+    return res.redirect('/signup');
+  }
+
+  var user = new User({
+    email: req.body.email.toLowerCase(),
+    password: req.body.password
+  });
+
+  User.findOne({ email: req.body.email.toLowerCase() }, function(err, existingUser) {
+    if (existingUser) {
+      req.flash('errors', { msg: 'Account with that email address already exists.' });
+      return res.redirect('/signup');
+    }
+    user.save(function(err) {
+      //this is where the new function begins
+
+      /**
+      *  POST signup/:token
+      *
+
+      async.waterfall([
+        function(done) {
+          crypto.randomBytes(16, function(err, buf) {
+            var token = buf.toString('hex');
+            done(err, token);
+          });
+        },
+        function(token, done) {
+
+            user.resetPasswordToken = token;
+            user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+            user.save(function(err) {
+              done(err, token, user);
+            });
+        },
+        function(token, user, done) {
+          var transporter = nodemailer.createTransport({
+            service: 'Mailgun',
+            auth: {
+              user: secrets.mailgun.user,
+              pass: secrets.mailgun.password
+            }
+          });
+          var mailOptions = {
+            to: user.email,
+            from: 'admin@marsipan.org.uk',
+            subject: 'Confirm Registration - Marsipan',
+            text: 'You are receiving this email because you (or someone else) have registered with www.marsipan.org.uk.\n\n' +
+              'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+              'http://' + req.headers.host + '/reset/' + token + '\n\n' +
+              'If you did not request this, please ignore this email.\n'
+          };
+          transporter.sendMail(mailOptions, function(err) {
+            req.flash('info', { msg: 'An e-mail has been sent to ' + user.email + ' with further instructions.' });
+            done(err, 'done');
+          });
+        }
+      ], function(err) {
+        if (err) return next(err);
+        res.redirect('/account/signup');
+      });
+      ////this is where the old function restarts
+      if (err) return next(err);
+      req.logIn(user, function(err) {
+        if (err) return next(err);
+        res.redirect('/');
+      });
+    });
+  });
+};
+*/

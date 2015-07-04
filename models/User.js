@@ -53,6 +53,16 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 };
 
 /**
+ * Helper method for testing presence of signup token.
+*/
+ userSchema.methods.hasToken = function(req, res){
+   if (this.resetPasswordToken.length > 0){
+     return true;
+   } else return false;
+ }
+
+
+/**
  * Helper method for getting user's gravatar.
  */
 userSchema.methods.gravatar = function(size) {
