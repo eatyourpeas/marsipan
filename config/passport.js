@@ -81,6 +81,7 @@ passport.use(new LocalStrategy({ usernameField: 'email' }, function(email, passw
         return done(null, false, { message: 'Invalid email or password.' });
       }
     });
+    
   });
 }));
 
