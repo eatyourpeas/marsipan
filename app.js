@@ -151,10 +151,16 @@ app.get('/api/bitgo', apiController.getBitGo);
 app.post('/api/bitgo', apiController.postBitGo);
 
 //routes
-app.get('/calculator', passportConf.isAuthenticated, calculatorController.getCalculator);
-app.post('/calculator', passportConf.isAuthenticated, calculatorController.postCalculator);
-app.get('/risktool', passportConf.isAuthenticated, riskToolController.getRiskTool);
-app.post('/risktool', passportConf.isAuthenticated, riskToolController.postRiskTool);
+
+app.get('/calculator', passportConf.isAuthenticated, calculatorController.getCalculator); // comment this out when in development
+app.post('/calculator', passportConf.isAuthenticated, calculatorController.postCalculator); // comment this out when in development
+app.get('/risktool', passportConf.isAuthenticated, riskToolController.getRiskTool); // comment this out when in development
+app.post('/risktool', passportConf.isAuthenticated, riskToolController.postRiskTool); // comment this out when in development
+
+// app.get('/calculator', calculatorController.getCalculator);   //comment this out when in production
+// app.post('/calculator', calculatorController.postCalculator); //comment this out when in production
+// app.get('/risktool', riskToolController.getRiskTool);   //comment this out when in production
+// app.post('/risktool', riskToolController.postRiskTool);   //comment this out when in production
 app.get('/about', homeController.getAbout);
 app.get('/publications', homeController.getPublications);
 app.get('/patientresources', patientController.getPatientResources);

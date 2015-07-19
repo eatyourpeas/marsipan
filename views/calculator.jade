@@ -1,7 +1,11 @@
 extends layout
 include mixins
 block content
-
+  .container
+    .alert.alert-info
+      strong Percentage Median BMI calculator:
+      |  This calculator uses UK-WHO growth and blood pressure data. It will calculate centiles and also a percentage of the young person's Body Mass Index from the median value for age and sex.
+      |  It is to guide the assessment of children and young people up to 18 years of age.
   div.container
     .col-md-4.col-sm-4.col-xs-12
       +panel("Patient Data","primary")
