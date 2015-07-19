@@ -151,10 +151,10 @@ app.get('/api/bitgo', apiController.getBitGo);
 app.post('/api/bitgo', apiController.postBitGo);
 
 //routes
-app.get('/calculator', passportConf.isAuthenticated, calculatorController.getCalculator);
+app.get('/calculator', calculatorController.getCalculator);
 app.post('/calculator', passportConf.isAuthenticated, calculatorController.postCalculator);
-app.get('/risktool', passportConf.isAuthenticated, riskToolController.getRiskTool);
-app.post('/risktool', passportConf.isAuthenticated, riskToolController.postRiskTool);
+app.get('/risktool', riskToolController.getRiskTool);
+app.post('/risktool', riskToolController.postRiskTool);
 app.get('/about', homeController.getAbout);
 app.get('/publications', homeController.getPublications);
 app.get('/patientresources', patientController.getPatientResources);

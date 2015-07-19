@@ -1,7 +1,63 @@
 extends layout
+include mixins
 block content
-  .container-fluid
-    .jumbotron
-      h1 Risk Tool
-      hr
-      p.lead Coming soon ...
+  .container
+    .alert.alert-info
+      strong Risk Assessment Tool:
+      |   Assess individual Risks for each Risk Category by selecting the colour using the drawing pin icon.
+  .container
+    .row
+        .col-md-4.col-sm-12.col-xs-12
+          +panel("Risk Categories","default")
+            table(class="table table-bordered table-hover", id="risktable")
+              thead
+                tbody(id='clickedrow')
+                  for object in risks
+                    tr
+                      td
+                        = object
+        .col-md-8.col-sm-12.col-xs-12
+            .panel.panel-default
+              .panel-heading
+                .panel-title Risks
+              .panel-body
+                .row
+                  .col-md-6.col-sm-12.col-xs-12
+                    .panel.panel-danger
+                      .panel-heading.clearfix
+                        .panel-title.clearfix Red Criteria
+                          .pull-right
+                            button.btn.btn-danger(type='button', id='redselect')
+                              .i( class="fa fa-thumb-tack")
+                      .panel-body
+                        p(id='redpanel')
+
+                  .col-md-6.col-sm-12.col-xs-12
+                      .panel.panel-warning
+                        .panel-heading.clearfix
+                          .panel-title.clearfix Amber Criteria
+                            .pull-right
+                              button.btn.btn-warning(type='button', id='amberselect')
+                                .i(class="fa fa-thumb-tack")
+                        .panel-body
+                          p(id='amberpanel')
+                .row
+                  .col-md-6.col-sm-12.col-xs-12
+                    .panel.panel-success
+                      .panel-heading.clearfix
+                        .panel-title.clearfix Green Criteria
+                          .pull-right
+                            button.btn.btn-success(type='button', id='greenselect')
+                              .i( class="fa fa-thumb-tack")
+                      .panel-body
+                        p(id='greenpanel')
+
+                  .col-md-6.col-sm-12.col-xs-12
+                    .panel.panel-info
+                      .panel-heading.clearfix
+                        .panel-title.clearfix Blue Criteria
+                          .pull-right
+                            button.btn.btn-info(type='button', id='blueselect')
+                              .i( class="fa fa-thumb-tack")
+                      .panel-body
+                        p(id='bluepanel')
