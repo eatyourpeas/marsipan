@@ -48,7 +48,7 @@ var app = express();
 /**
  * Connect to MongoDB.
  */
-mongoose.connect(secrets.db);
+mongoose.connect(process.env.MONGODB);
 mongoose.connection.on('error', function() {
   console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
 });
@@ -74,8 +74,8 @@ app.use(cookieParser());
 app.use(session({
   resave: true,
   saveUninitialized: true,
-  secret: secrets.sessionSecret,
-  store: new MongoStore({ url: secrets.db, autoReconnect: true })
+  secret: process.env.SESSION_SECRET,
+  store: new MongoStore({ url: process.env.MONGODB, autoReconnect: true })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
