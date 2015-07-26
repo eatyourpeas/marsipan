@@ -30,7 +30,7 @@ exports.postCalculator = function(req, res){
 
 	var decimal_age, calendar_age, height_centile, height_sds, weight_centile, weight_sds, bmi, bmi_centile, bmi_sds, pctmBMI, systolicBP, diastolicBP, systolic_sds, systolic_centile, diastolic_sds, diastolic_centile;
 	decimal_age = growthmethods.decimalAgeFromDates(date_of_birth, clinic_date);
-
+console.log(date_of_birth);
 	var calendar_age = growthmethods.chronologicalAgeFromDates(date_of_birth, clinic_date);
 
 	var originalDecimalAge = decimal_age;
@@ -50,10 +50,9 @@ exports.postCalculator = function(req, res){
 	bmi_centile = growthmethods.convertZScoreToCentile(bmi_sds);
 	pctmBMI = growthmethods.percentageMedianBMI(bmi, decimal_age, isMale);
 
-console.log('ermm.. '+systolicBP);
 
   if (systolicBP.length > 0) {
-    console.log('true!');
+    
     systolic_sds = growthmethods.bpSDS(true, isMale, decimal_age, systolicBP);
     systolic_centile = growthmethods.convertZScoreToCentile(systolic_sds);
     systolic_sds = Math.round(systolic_sds*100)/100;

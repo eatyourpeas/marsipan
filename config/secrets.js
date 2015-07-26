@@ -24,7 +24,8 @@ module.exports = {
 //  db: process.env.MONGODB || 'mongodb://localhost:27017/test', //comment out for production
  db: process.env.MONGODB, //comment out for development
 
-  sessionSecret: process.env.SESSION_SECRET,
+  sessionSecret: process.env.SESSION_SECRET, // comment out for development
+//  sessionSecret: "sessionsecret", //comment out for production
 
   mailgun: {
     user: process.env.MAILGUN_USER,
