@@ -4,7 +4,9 @@ Marsipan
 
 
 
-**Live Demo**: http://www.Marsipan.org.uk
+**Live Site**: http://www.Marsipan.org.uk
+
+Registration only eligible to NHS employees
 
 
 A Project to support clinicians looking after peope with eating disorders
@@ -31,6 +33,9 @@ Project Structure
 | **controllers**/contact.js         | Controller for contact form.                                 |
 | **controllers**/home.js            | Controller for home page (index).                            |
 | **controllers**/user.js            | Controller for user account management.                      |
+| **controllers**/risks.js           | Controller for risk assessment tool.                         |
+| **controllers**/calculator.js      | Controller for BMI and centiles calculator                   |
+| **controllers**/patient.js         | Controller for patient resource page.                        |
 | **models**/User.js                 | Mongoose schema and model for User.                          |
 | **public**/                        | Static assets (fonts, css, js, img).                         |
 | **public**/**js**/application.js   | Specify client-side JavaScript dependencies.                 |
@@ -80,9 +85,7 @@ List of Packages
 | express-validator               | Easy form validation for Express.                                     |
 | fbgraph                         | Facebook Graph API library.                                           |
 | github-api                      | GitHub API library.
-|
 | growthmethods                   | reference data and methods
-|
 | jade                            | Template engine for Express.                                          |
 | lastfm                          | Last.fm API library.                                                  |
 | instagram-node                  | Instagram API library.                                                |
@@ -90,6 +93,8 @@ List of Packages
 | lob                             | Lob API library                                                       |
 | lusca                           | CSRF middleware.                                                      |
 | mongoose                        | MongoDB ODM.                                                          |
+| moment                          | date formatting                                                          |
+| moment-duration-format          | date formattting                                                          |
 | node-foursquare                 | Foursquare API library.                                               |
 | node-linkedin                   | LinkedIn API library.                                                 |
 | nodemailer                      | Node.js library for sending emails.                                   |
@@ -123,20 +128,15 @@ List of Packages
 Contributing
 ------------
 
-If something is unclear, confusing, or needs to be refactored, please let me know.
-Pull requests are always welcome, but due to the opinionated nature of this
-project, I cannot accept every pull request. Please open an issue before
-submitting a pull request. This project uses
-[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) with a
-few minor exceptions. If you are submitting a pull request that involves
-Jade templates, please make sure you are using *spaces*, not tabs.
+Pull requests are considered if you wish to contribute to this project. Get in touch by email or find me on Twitter.
+www.eatyourpeas.co.uk
 
 License
 -------
 
 The MIT License (MIT)
 
-Copyright (c) 2014-2015 Sahat Yalkabov
+Copyright (c) 2015 eatyourpeas
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
