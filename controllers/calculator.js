@@ -30,7 +30,7 @@ exports.postCalculator = function(req, res){
 
 	var decimal_age, calendar_age, height_centile, height_sds, weight_centile, weight_sds, bmi, bmi_centile, bmi_sds, pctmBMI, systolicBP, diastolicBP, systolic_sds, systolic_centile, diastolic_sds, diastolic_centile;
 	decimal_age = growthmethods.decimalAgeFromDates(date_of_birth, clinic_date);
-console.log(date_of_birth);
+
 	var calendar_age = growthmethods.chronologicalAgeFromDates(date_of_birth, clinic_date);
 
 	var originalDecimalAge = decimal_age;
@@ -51,24 +51,57 @@ console.log(date_of_birth);
 	pctmBMI = growthmethods.percentageMedianBMI(bmi, decimal_age, isMale);
 
 
+
   if (systolicBP.length > 0) {
-    
-    systolic_sds = growthmethods.bpSDS(true, isMale, decimal_age, systolicBP);
-    systolic_centile = growthmethods.convertZScoreToCentile(systolic_sds);
-    systolic_sds = Math.round(systolic_sds*100)/100;
-    systolic_centile = Math.round(systolic_centile*10)/10;
-    systolic_centile = centileBeyondThreshold(systolic_centile);
+
+    if (height.length > 0) {
+      console.log('reporting Fourth data');
+        //this calculates BP SDS & centiles from Fourth data - will be reported only if height given
+        var fourthSBP = growthmethods.BPZFromHeightSDSAndDecimalAgeAndSex(true, height_sds, systolicBP, decimal_age, isMale);
+        systolic_centile = growthmethods.convertZScoreToCentile(fourthSBP);
+        systolic_sds = Math.round(fourthSBP*100)/100;
+        systolic_centile = Math.round(systolic_centile*10)/10;
+        systolic_centile = centileBeyondThreshold(systolic_centile);
+
+    } else {
+      console.log('reporting Jackson data');
+      //this calculates BP SDS & centiles from Jackson data - will be reported if no height given
+      systolic_sds = growthmethods.bpSDS(true, isMale, decimal_age, systolicBP);
+      systolic_centile = growthmethods.convertZScoreToCentile(systolic_sds);
+      systolic_sds = Math.round(systolic_sds*100)/100;
+      systolic_centile = Math.round(systolic_centile*10)/10;
+      systolic_centile = centileBeyondThreshold(systolic_centile);
+
+    }
+
   } else {
     systolic_centile = "";
     systolic_sds = "";
   }
 
   if (diastolicBP.length > 0) {
-    diastolic_sds = growthmethods.bpSDS(false, isMale, decimal_age, diastolicBP);
-    diastolic_centile = growthmethods.convertZScoreToCentile(diastolic_sds);
-    diastolic_sds = Math.round(diastolic_sds*100)/100;
-    diastolic_centile = Math.round(diastolic_centile*10)/10;
-    diastolic_centile = centileBeyondThreshold(diastolic_centile);
+
+    if (height.length > 0) {
+
+      //this calculates BP SDS & centiles from Fourth data - will be reported only if height given
+      var fourthDBP = growthmethods.BPZFromHeightSDSAndDecimalAgeAndSex(false, height_sds, systolicBP, decimal_age, isMale);
+      diastolic_sds = Math.round(fourthDBP*100)/100;
+      diastolic_centile = growthmethods.convertZScoreToCentile(diastolic_sds);
+      diastolic_centile = Math.round(diastolic_centile*10)/10;
+      diastolic_centile = centileBeyondThreshold(diastolic_centile);
+
+    } else {
+
+      //this calculates BP SDS & centiles from Jackson data - will be reported if no height given
+      diastolic_sds = growthmethods.bpSDS(false, isMale, decimal_age, diastolicBP);
+      diastolic_centile = growthmethods.convertZScoreToCentile(diastolic_sds);
+      diastolic_sds = Math.round(diastolic_sds*100)/100;
+      diastolic_centile = Math.round(diastolic_centile*10)/10;
+      diastolic_centile = centileBeyondThreshold(diastolic_centile);
+
+    }
+
+
   } else {
     diastolic_centile = "";
     diastolic_sds = "";

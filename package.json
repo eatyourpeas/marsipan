@@ -1,6 +1,6 @@
 {
   "name": "marsipan",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/eatyourpeas/marsipan.git"
@@ -28,7 +28,7 @@
     "express-validator": "^2.12.1",
     "fbgraph": "^1.0.0",
     "github-api": "^0.10.6",
-    "growthmethods": "1.1.2",
+    "growthmethods": "1.2.4",
     "instagram-node": "^0.5.7",
     "jade": "^1.11.0",
     "lastfm": "^0.9.2",

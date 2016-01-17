@@ -3,9 +3,9 @@ include mixins
 block content
   .container
     .alert.alert-info
-      strong Percentage Median BMI calculator:
-      |  This calculator uses UK-WHO growth and blood pressure data. It will calculate centiles and also a percentage of the young person's Body Mass Index from the median value for age and sex.
-      |  It is to guide the assessment of children and young people up to 18 years of age.
+      strong Percentage Median BMI calculator:&nbsp;
+      |  This calculator uses UK-WHO growth data. It will calculate standard deviation scores (SDS) and centiles for height, weight and body mass index (BMI). It will also calculate the 'percentage median BMI (%mBMI)' - sometimes described as 'weight for height' - by expressing the young person's BMI as percentage of the median BMI for age and sex.
+      |  It is to guide the assessment of children and young people up to 18 years of age. Blood pressure centiles and standard deviation scores are calculated using the Fourth data unless height is not provided, when Jackson data instead are used.
   div.container
     .col-md-4.col-sm-4.col-xs-12
       +panel("Patient Data","primary")
@@ -214,3 +214,15 @@ block content
            label +2 SD:
           .div(class="col-sm-4 col-md-4")
            label #{two_sd + " kg"}
+  .row
+   .container
+    .alert.alert-info
+     strong References
+     small
+      p Cole TJ, Green PJ (1992). Smoothing reference centile curves: the LMS method and penalized likelihood. Statistics in Medicine, 11:1305–1319.
+      p The Fourth Report on the Diagnosis, Evaluation, and Treatment of High Blood Pressure in Children and Adolescents, PEDIATRICS Vol. 114 No. Supplement 2 August 1, 2004 pp. 555-576
+      p Jackson L V, Thalange N K S, Cole T J. Blood pressure centiles for Great Britain. Arch Dis Child 200792298–303.303
+      p British 1990 reference data, reanalysed 2009
+      p WHO Multicentre Growth Reference Study Group. WHO Child Growth Standards:Length/Height-for-age, Weight-for-age, Weight-for-length, Weight-for-height and Body Mass Index-for age. Methods and Development. 2006. ISBN    92 4 154693 X.
+      p Cole TJ, Freeman JV, Preece MA. British 1990 growth reference centiles for weight, height, body mass index and head circumference fitted by maximum penalized likelihood. Stat Med 1998;17:407-29.
+      p Cole TJ, Freeman JV, Preece MA. 1998. British 1990 growth reference centiles for weight, height, body mass index and head circumference fitted by maximum penalized likelihood. Stat Med 17(4):407-29
