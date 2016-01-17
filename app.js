@@ -48,8 +48,8 @@ var app = express();
 /**
  * Connect to MongoDB.
  */
-//mongoose.connect(process.env.MONGODB); //comment out in development
- mongoose.connect('mongodb://localhost:27017/test'); //comment out in production
+mongoose.connect(process.env.MONGODB); //comment out in development
+// mongoose.connect('mongodb://localhost:27017/test'); //comment out in production
 mongoose.connection.on('error', function() {
   console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
 });
@@ -75,10 +75,10 @@ app.use(cookieParser());
 app.use(session({
   resave: true,
   saveUninitialized: true,
-//  secret: process.env.SESSION_SECRET, //comment out in development
-  secret: "aadfafafadfadfa", //comment out in production
-//  store: new MongoStore({ url: process.env.MONGODB, autoReconnect: true }) //comment out in development
-  store: new MongoStore({ url: 'mongodb://localhost:27017/test', autoReconnect: true }) //comment out in production
+  secret: process.env.SESSION_SECRET, //comment out in development
+//  secret: "aadfafafadfadfa", //comment out in production
+  store: new MongoStore({ url: process.env.MONGODB, autoReconnect: true }) //comment out in development
+//  store: new MongoStore({ url: 'mongodb://localhost:27017/test', autoReconnect: true }) //comment out in production
 }));
 app.use(passport.initialize());
 app.use(passport.session());
