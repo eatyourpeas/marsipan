@@ -35,6 +35,10 @@ exports.postCalculator = function(req, res){
 
 	var originalDecimalAge = decimal_age;
 
+  var correctedage = growthmethods.correctedDecimalAgeFromDatesAndGestation(date_of_birth, clinic_date, 25, 2);
+
+
+
 	if (decimal_age >20) {
 		decimal_age = 20;
 	};
@@ -49,7 +53,11 @@ exports.postCalculator = function(req, res){
 	height_centile = growthmethods.convertZScoreToCentile(height_sds);
 	bmi_centile = growthmethods.convertZScoreToCentile(bmi_sds);
 	pctmBMI = growthmethods.percentageMedianBMI(bmi, decimal_age, isMale);
+console.log('corrected age: ' + correctedage + ' decimal: ' + decimal_age);
+console.log('height ' + growthmethods.SDS("height",  correctedage,  height, isMale));
+console.log('weight ' + growthmethods.SDS("weight",  correctedage,  weight, isMale));
 
+console.log('uncorrected '+height_sds);
 
 
   if (systolicBP.length > 0) {
