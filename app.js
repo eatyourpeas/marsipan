@@ -48,8 +48,8 @@ var app = express();
 /**
  * Connect to MongoDB.
  */
-//mongoose.connect(process.env.MONGODB); //comment out in development
- mongoose.connect('mongodb://localhost:27017/test'); //comment out in production
+mongoose.connect(process.env.MONGODB); //comment out in development
+// mongoose.connect('mongodb://localhost:27017/test'); //comment out in production
 mongoose.connection.on('error', function() {
   console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
 });
