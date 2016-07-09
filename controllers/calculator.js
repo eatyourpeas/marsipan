@@ -53,11 +53,6 @@ exports.postCalculator = function(req, res){
 	height_centile = growthmethods.convertZScoreToCentile(height_sds);
 	bmi_centile = growthmethods.convertZScoreToCentile(bmi_sds);
 	pctmBMI = growthmethods.percentageMedianBMI(bmi, decimal_age, isMale);
-console.log('corrected age: ' + correctedage + ' decimal: ' + decimal_age);
-console.log('height ' + growthmethods.SDS("height",  correctedage,  height, isMale));
-console.log('weight ' + growthmethods.SDS("weight",  correctedage,  weight, isMale));
-
-console.log('uncorrected '+height_sds);
 
 
   if (systolicBP.length > 0) {
@@ -92,7 +87,7 @@ console.log('uncorrected '+height_sds);
     if (height.length > 0) {
 
       //this calculates BP SDS & centiles from Fourth data - will be reported only if height given
-      var fourthDBP = growthmethods.BPZFromHeightSDSAndDecimalAgeAndSex(false, height_sds, systolicBP, decimal_age, isMale);
+      var fourthDBP = growthmethods.BPZFromHeightSDSAndDecimalAgeAndSex(false, height_sds, diastolicBP, decimal_age, isMale);
       diastolic_sds = Math.round(fourthDBP*100)/100;
       diastolic_centile = growthmethods.convertZScoreToCentile(diastolic_sds);
       diastolic_centile = Math.round(diastolic_centile*10)/10;
