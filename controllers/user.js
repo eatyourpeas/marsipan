@@ -96,7 +96,7 @@ exports.getSignup = function(req, res) {
  */
 exports.postSignup = function(req, res, next) {
   req.assert('email', 'Email is not valid').isEmail();
-  req.assert('email', 'Email must be an NHS email').matches(/(nhs|NHS)|(fshc|FSHC)/);
+  req.assert('email', 'Email must be an NHS email').matches(/(nhs)|(fshc)/(huntercombe.com)/ig);
   req.assert('password', 'Password must be at least 4 characters long').len(4);
   req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
 
