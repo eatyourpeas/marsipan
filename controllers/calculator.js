@@ -1,4 +1,13 @@
 var growthmethods = require('growthmethods');
+
+exports.getApps = function(req, res){
+  res.render('apps', {
+    title: 'Apps',
+    unlock_code: process.env.UNLOCK_CODE
+  });
+}
+
+
 /**
  * GET /
  * Calculator page.

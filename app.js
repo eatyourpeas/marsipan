@@ -159,6 +159,7 @@ app.get('/calculator', passportConf.isAuthenticated, calculatorController.getCal
 app.post('/calculator', passportConf.isAuthenticated, calculatorController.postCalculator); // comment this out when in development
 app.get('/risktool', passportConf.isAuthenticated, riskToolController.getRiskTool); // comment this out when in development
 app.post('/risktool', passportConf.isAuthenticated, riskToolController.postRiskTool); // comment this out when in development
+app.get('/apps', passportConf.isAuthenticated, calculatorController.getApps);
 
 // app.get('/calculator', calculatorController.getCalculator);   //comment this out when in production
 // app.post('/calculator', calculatorController.postCalculator); //comment this out when in production

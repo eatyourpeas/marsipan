@@ -1,0 +1,22 @@
+extends layout
+include mixins
+block content
+  .container-fluid
+    H1
+      Mobile Apps
+    hr
+    .row
+      H4 Now the risk assessment tool and %mBMI calculator are available as an Android or iPhone/iPad mobile app!
+      br
+    .row
+      .div(class="col-lg-6 col-md-6 col-xs-6")
+        a(href='https://play.google.com/store/apps/details?id=eatyourpeas.co.uk.marsipan&hl=en')
+          img(src="/images/google-play-store.png" style="width: 50%;")
+      .div(class="col-lg-6 col-md-6 col-xs-12")
+        a(href='https://itunes.apple.com/us/app/junior-marsipan/id951888106?ls=1&mt=8')
+          img(src="/images/app-store-logo.png" style="width: 60%;")
+    .row
+      br
+      H4 To activate your app, you will need to enter the following code the first time you open it.
+      .alert.alert-info
+        H3 #{unlock_code}
