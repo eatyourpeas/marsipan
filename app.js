@@ -120,7 +120,6 @@ app.post('/account/password', passportConf.isAuthenticated, userController.postU
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
 
-
 //routes
 
 app.get('/calculator', passportConf.isAuthenticated, calculatorController.getCalculator); // comment this out when in development
@@ -185,8 +184,6 @@ app.get('/auth/venmo/callback', passport.authorize('venmo', { failureRedirect: '
  * Error Handler.
  */
 app.use(errorHandler());
-
-//var port = process.env.PORT || 8080;
 
 /**
  * Start Express server.
