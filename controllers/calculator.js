@@ -65,8 +65,8 @@ exports.postCalculator = function(req, res){
 
 
   if (systolicBP.length > 0) {
-
-    if (height.length > 0) {
+    /*
+    if (height.length > 0) { //used to use height centile and fourth data
       console.log('reporting Fourth data');
         //this calculates BP SDS & centiles from Fourth data - will be reported only if height given
         var fourthSBP = growthmethods.BPZFromHeightSDSAndDecimalAgeAndSex(true, height_sds, systolicBP, decimal_age, isMale);
@@ -76,6 +76,7 @@ exports.postCalculator = function(req, res){
         systolic_centile = centileBeyondThreshold(systolic_centile);
 
     } else {
+    */
       console.log('reporting Jackson data');
       //this calculates BP SDS & centiles from Jackson data - will be reported if no height given
       systolic_sds = growthmethods.bpSDS(true, isMale, decimal_age, systolicBP);
@@ -84,7 +85,7 @@ exports.postCalculator = function(req, res){
       systolic_centile = Math.round(systolic_centile*10)/10;
       systolic_centile = centileBeyondThreshold(systolic_centile);
 
-    }
+
 
   } else {
     systolic_centile = "";
