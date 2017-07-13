@@ -28,7 +28,7 @@ var growthmethods = require('growthmethods');
  */
 var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
-var apiController = require('./controllers/api');
+//var apiController = require('./controllers/api');
 var contactController = require('./controllers/contact');
 var calculatorController = require('./controllers/calculator');
 var riskToolController = require('./controllers/risks');
@@ -48,8 +48,8 @@ var app = express();
 /**
  * Connect to MongoDB.
  */
-mongoose.connect(process.env.MONGODB); //comment out in development
-// mongoose.connect('mongodb://localhost:27017/test'); //comment out in production
+mongoose.createConnection(process.env.MONGODB, {useMongoClient: true}); //comment out in development
+//mongoose.createConnection('mongodb://localhost:27017/test', {useMongoClient: true}); //comment out in production
 mongoose.connection.on('error', function() {
   console.error('MongoDB Connection Error. Please make sure that MongoDB is running.');
 });
@@ -136,49 +136,6 @@ app.get('/about', homeController.getAbout);
 app.get('/publications', homeController.getPublications);
 app.get('/patientresources', patientController.getPatientResources);
 
-/**
- * OAuth authentication routes. (Sign in)
- */
-app.get('/auth/instagram', passport.authenticate('instagram'));
-app.get('/auth/instagram/callback', passport.authenticate('instagram', { failureRedirect: '/login' }), function(req, res) {
-  res.redirect(req.session.returnTo || '/');
-});
-app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'user_location'] }));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), function(req, res) {
-  res.redirect(req.session.returnTo || '/');
-});
-app.get('/auth/github', passport.authenticate('github'));
-app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), function(req, res) {
-  res.redirect(req.session.returnTo || '/');
-});
-app.get('/auth/google', passport.authenticate('google', { scope: 'profile email' }));
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), function(req, res) {
-  res.redirect(req.session.returnTo || '/');
-});
-app.get('/auth/twitter', passport.authenticate('twitter'));
-app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/login' }), function(req, res) {
-  res.redirect(req.session.returnTo || '/');
-});
-app.get('/auth/linkedin', passport.authenticate('linkedin', { state: 'SOME STATE' }));
-app.get('/auth/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/login' }), function(req, res) {
-  res.redirect(req.session.returnTo || '/');
-});
-
-/**
- * OAuth authorization routes. (API examples)
- */
-app.get('/auth/foursquare', passport.authorize('foursquare'));
-app.get('/auth/foursquare/callback', passport.authorize('foursquare', { failureRedirect: '/api' }), function(req, res) {
-  res.redirect('/api/foursquare');
-});
-app.get('/auth/tumblr', passport.authorize('tumblr'));
-app.get('/auth/tumblr/callback', passport.authorize('tumblr', { failureRedirect: '/api' }), function(req, res) {
-  res.redirect('/api/tumblr');
-});
-app.get('/auth/venmo', passport.authorize('venmo', { scope: 'make_payments access_profile access_balance access_email access_phone' }));
-app.get('/auth/venmo/callback', passport.authorize('venmo', { failureRedirect: '/api' }), function(req, res) {
-  res.redirect('/api/venmo');
-});
 
 /**
  * Error Handler.

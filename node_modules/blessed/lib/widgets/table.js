@@ -8,8 +8,6 @@
  * Modules
  */
 
-var helpers = require('../helpers');
-
 var Node = require('./node');
 var Box = require('./box');
 
@@ -44,6 +42,11 @@ function Table(options) {
 
   this.setData(options.rows || options.data);
 
+  this.on('attach', function() {
+    self.setContent('');
+    self.setData(self.rows);
+  });
+
   this.on('resize', function() {
     self.setContent('');
     self.setData(self.rows);
@@ -58,6 +61,10 @@ Table.prototype.type = 'table';
 Table.prototype._calculateMaxes = function() {
   var self = this;
   var maxes = [];
+
+  if (this.detached) return;
+
+  this.rows = this.rows || [];
 
   this.rows.forEach(function(row) {
     row.forEach(function(cell, i) {
@@ -103,15 +110,15 @@ Table.prototype.setRows =
 Table.prototype.setData = function(rows) {
   var self = this
     , text = ''
-    , line = ''
     , align = this.align;
 
   this.rows = rows || [];
 
   this._calculateMaxes();
 
+  if (!this._maxes) return;
+
   this.rows.forEach(function(row, i) {
-    var isHeader = i === 0;
     var isFooter = i === self.rows.length - 1;
     row.forEach(function(cell, i) {
       var width = self._maxes[i];
@@ -171,9 +178,7 @@ Table.prototype.render = function() {
 
   var lines = this.screen.lines
     , xi = coords.xi
-    , xl = coords.xl
     , yi = coords.yi
-    , yl = coords.yl
     , rx
     , ry
     , i;
@@ -198,6 +203,7 @@ Table.prototype.render = function() {
       } else {
         lines[yi + y][xi + x][0] = cattr;
       }
+      lines[yi + y].dirty = true;
     }
   }
 
@@ -230,33 +236,39 @@ Table.prototype.render = function() {
             lines[yi + ry][xi + 0][1] = '\u2500'; // '─'
           }
         }
+        lines[yi + ry].dirty = true;
       } else if (i === self._maxes.length - 1) {
         if (!lines[yi + ry][xi + rx + 1]) return;
         // right side
         if (ry === 0) {
           // top
-          lines[yi + ry][xi + ++rx][0] = battr;
+          rx++;
+          lines[yi + ry][xi + rx][0] = battr;
           // lines[yi + ry][xi + rx][1] = '\u2510'; // '┐'
         } else if (ry / 2 === self.rows.length) {
           // bottom
-          lines[yi + ry][xi + ++rx][0] = battr;
+          rx++;
+          lines[yi + ry][xi + rx][0] = battr;
           // lines[yi + ry][xi + rx][1] = '\u2518'; // '┘'
         } else {
           // middle
-          lines[yi + ry][xi + ++rx][0] = battr;
+          rx++;
+          lines[yi + ry][xi + rx][0] = battr;
           lines[yi + ry][xi + rx][1] = '\u2524'; // '┤'
           // XXX If we alter iwidth and iright for no borders - nothing should be written here
           if (!self.border.right) {
             lines[yi + ry][xi + rx][1] = '\u2500'; // '─'
           }
         }
+        lines[yi + ry].dirty = true;
         return;
       }
       if (!lines[yi + ry][xi + rx + 1]) return;
       // center
       if (ry === 0) {
         // top
-        lines[yi + ry][xi + ++rx][0] = battr;
+        rx++;
+        lines[yi + ry][xi + rx][0] = battr;
         lines[yi + ry][xi + rx][1] = '\u252c'; // '┬'
         // XXX If we alter iheight and itop for no borders - nothing should be written here
         if (!self.border.top) {
@@ -264,7 +276,8 @@ Table.prototype.render = function() {
         }
       } else if (ry / 2 === self.rows.length) {
         // bottom
-        lines[yi + ry][xi + ++rx][0] = battr;
+        rx++;
+        lines[yi + ry][xi + rx][0] = battr;
         lines[yi + ry][xi + rx][1] = '\u2534'; // '┴'
         // XXX If we alter iheight and ibottom for no borders - nothing should be written here
         if (!self.border.bottom) {
@@ -274,13 +287,16 @@ Table.prototype.render = function() {
         // middle
         if (self.options.fillCellBorders) {
           var lbg = (ry <= 2 ? hattr : cattr) & 0x1ff;
-          lines[yi + ry][xi + ++rx][0] = (battr & ~0x1ff) | lbg;
+          rx++;
+          lines[yi + ry][xi + rx][0] = (battr & ~0x1ff) | lbg;
         } else {
-          lines[yi + ry][xi + ++rx][0] = battr;
+          rx++;
+          lines[yi + ry][xi + rx][0] = battr;
         }
         lines[yi + ry][xi + rx][1] = '\u253c'; // '┼'
-        // ++rx;
+        // rx++;
       }
+      lines[yi + ry].dirty = true;
     });
     ry += 2;
   }
@@ -289,23 +305,26 @@ Table.prototype.render = function() {
   for (ry = 1; ry < self.rows.length * 2; ry++) {
     if (!lines[yi + ry]) break;
     rx = 0;
-    self._maxes.slice(0, -1).forEach(function(max, i) {
+    self._maxes.slice(0, -1).forEach(function(max) {
       rx += max;
       if (!lines[yi + ry][xi + rx + 1]) return;
       if (ry % 2 !== 0) {
         if (self.options.fillCellBorders) {
           var lbg = (ry <= 2 ? hattr : cattr) & 0x1ff;
-          lines[yi + ry][xi + ++rx][0] = (battr & ~0x1ff) | lbg;
+          rx++;
+          lines[yi + ry][xi + rx][0] = (battr & ~0x1ff) | lbg;
         } else {
-          lines[yi + ry][xi + ++rx][0] = battr;
+          rx++;
+          lines[yi + ry][xi + rx][0] = battr;
         }
         lines[yi + ry][xi + rx][1] = '\u2502'; // '│'
+        lines[yi + ry].dirty = true;
       } else {
         rx++;
       }
     });
     rx = 1;
-    self._maxes.forEach(function(max, i) {
+    self._maxes.forEach(function(max) {
       while (max--) {
         if (ry % 2 === 0) {
           if (!lines[yi + ry]) break;
@@ -317,6 +336,7 @@ Table.prototype.render = function() {
             lines[yi + ry][xi + rx][0] = battr;
           }
           lines[yi + ry][xi + rx][1] = '\u2500'; // '─'
+          lines[yi + ry].dirty = true;
         }
         rx++;
       }

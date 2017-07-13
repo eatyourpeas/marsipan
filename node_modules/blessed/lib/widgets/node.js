@@ -10,13 +10,14 @@
 
 var EventEmitter = require('../events').EventEmitter;
 
-var helpers = require('../helpers');
-
 /**
  * Node
  */
 
 function Node(options) {
+  var self = this;
+  var Screen = require('./screen');
+
   if (!(this instanceof Node)) {
     return new Node(options);
   }
@@ -25,15 +26,43 @@ function Node(options) {
 
   options = options || {};
   this.options = options;
-  this.screen = this.screen
-    || options.screen
-    || require('./screen').global
-    || (function(){throw new Error('No active screen.')})();
+
+  this.screen = this.screen || options.screen;
+
+  if (!this.screen) {
+    if (this.type === 'screen') {
+      this.screen = this;
+    } else if (Screen.total === 1) {
+      this.screen = Screen.global;
+    } else if (options.parent) {
+      this.screen = options.parent;
+      while (this.screen && this.screen.type !== 'screen') {
+        this.screen = this.screen.parent;
+      }
+    } else if (Screen.total) {
+      // This _should_ work in most cases as long as the element is appended
+      // synchronously after the screen's creation. Throw error if not.
+      this.screen = Screen.instances[Screen.instances.length - 1];
+      process.nextTick(function() {
+        if (!self.parent) {
+          throw new Error('Element (' + self.type + ')'
+            + ' was not appended synchronously after the'
+            + ' screen\'s creation. Please set a `parent`'
+            + ' or `screen` option in the element\'s constructor'
+            + ' if you are going to use multiple screens and'
+            + ' append the element later.');
+        }
+      });
+    } else {
+      throw new Error('No active screen.');
+    }
+  }
+
   this.parent = options.parent || null;
   this.children = [];
   this.$ = this._ = this.data = {};
   this.uid = Node.uid++;
-  this.index = -1;
+  this.index = this.index != null ? this.index : -1;
 
   if (this.type !== 'screen') {
     this.detached = true;
@@ -55,8 +84,13 @@ Node.prototype.type = 'node';
 Node.prototype.insert = function(element, i) {
   var self = this;
 
+  if (element.screen && element.screen !== this.screen) {
+    throw new Error('Cannot switch a node\'s screen.');
+  }
+
   element.detach();
   element.parent = this;
+  element.screen = this.screen;
 
   if (i === 0) {
     this.children.unshift(element);
@@ -133,6 +167,19 @@ Node.prototype.remove = function(element) {
 
 Node.prototype.detach = function() {
   if (this.parent) this.parent.remove(this);
+};
+
+Node.prototype.free = function() {
+  return;
+};
+
+Node.prototype.destroy = function() {
+  this.detach();
+  this.forDescendants(function(el) {
+    el.free();
+    el.destroyed = true;
+    el.emit('destroy');
+  }, this);
 };
 
 Node.prototype.forDescendants = function(iter, s) {
