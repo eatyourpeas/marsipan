@@ -1,8 +1,16 @@
 
-Marsipan
-=======================
+# Marsipan
 
 
+## This site is now deprecated and archived**
+
+The MaRSiPAN app remains live on Google Play and the Apple AppStore, but the marsipan live site has been retired and the URL is nolonger live. There is a place holder site [here](https://eatyourpeas.github.io/meed-site) here providing a privacy statement, a key requirement of all active apps on the store.
+
+The MaRSiPAN guidance has now been superceded by MEED (managing emergencies in eating disorders) and in due course the MaRSiPAN apps will be retired and replaced.
+
+This repository is now archived and nolonger maintained.
+
+---------------------------------------------------------
 
 **Live Site**: http://www.Marsipan.org.uk
 
